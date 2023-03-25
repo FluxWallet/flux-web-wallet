@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useAccount, useSigner } from "wagmi";
 
-import { Card } from "@/components/shared/Card";
 import { DefaultLayout } from "@/components/layouts/Default";
+import { Card } from "@/components/shared/Card";
 import { useFluxWallet } from "@/hooks/useFluxWallet";
 import { dataContext } from "@/types";
 
@@ -170,24 +170,26 @@ const HomePage: NextPage = () => {
                       Deploy
                     </label>
 
-                    <input type="checkbox" id="my-modal-6" className="modal-toggle" />
-                    <div className="modal modal-bottom sm:modal-middle">
-                      <div className="modal-box relative">
-                        <label htmlFor="my-modal-6" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-                        <h3 className="font-bold text-lg">Deploying Your Smart Contract Wallet</h3>
-                        <progress className="progress w-56"></progress>
-                        <div className="modal-action">
-                          <label htmlFor="my-modal-6" className="btn" onClick={deploy3}>Yay!</label>
+                    <div>
+                      <input type="checkbox" id="my-modal-6" className="modal-toggle" />
+                      <div className="modal modal-bottom sm:modal-middle">
+                        <div className="modal-box relative">
+                          <label htmlFor="my-modal-6" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                          <h3 className="font-bold text-lg">Deploying Your Smart Contract Wallet</h3>
+                          <progress className="progress w-56"></progress>
+                          <div className="modal-action">
+                            <label htmlFor="my-modal-6" className="btn" onClick={deploy3}>Yay!</label>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <input type="checkbox" id="my-modal-7" className="modal-toggle h-[600]" />
-                    <div className="modal modal-bottom sm:modal-middle">
-                      <div className="modal-box">
-                        <div id="stripe-root" ref={stripeRootRef}></div>
-                        <div className="modal-action">
-                          <label htmlFor="my-modal-7" className="btn">Close</label>
+                      <input type="checkbox" id="my-modal-7" className="modal-toggle h-[600]" />
+                      <div className="modal modal-bottom sm:modal-middle">
+                        <div className="modal-box">
+                          <div id="stripe-root" ref={stripeRootRef}></div>
+                          <div className="modal-action">
+                            <label htmlFor="my-modal-7" className="btn">Close</label>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -196,8 +198,8 @@ const HomePage: NextPage = () => {
               </Card>
             </div>
           )}
-        </div>
-      </DefaultLayout>
+    </div>
+      </DefaultLayout >
     </dataContext.Provider >
   );
 };
