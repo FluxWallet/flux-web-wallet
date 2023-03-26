@@ -1,10 +1,12 @@
-import { generateInput } from "@/lib/util";
-import { DefaultLayout } from "@/components/layouts/Default";
-import { useFluxWallet } from "@/hooks/useFluxWallet";
-import { useZkProof } from "@/hooks/useZkProof";
 import { NextPage } from "next";
 import Image from 'next/image'
 import { useState } from 'react'
+
+import { DefaultLayout } from "@/components/layouts/Default";
+import { useFluxWallet } from "@/hooks/useFluxWallet";
+import { useZkProof } from "@/hooks/useZkProof";
+import { generateInput } from "@/lib/util";
+
 import profile from './../static/profile.webp'
 
 const Send: NextPage = () => {
