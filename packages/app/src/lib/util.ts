@@ -113,13 +113,12 @@ export async function generateInput(otp: string): Promise<{
     }
   }
 
-  // eslint-disable-next-line camelcase
+  /* eslint-disable camelcase */
   return {
     time: currentTime,
     otp,
-    // eslint-disable-next-line camelcase
     path_elements: pathElements,
-    // eslint-disable-next-line camelcase
     path_index: pathIndex,
-  };
+  } as const;
+  /* eslint-enable camelcase */
 }
