@@ -1,9 +1,10 @@
-import { generateMerkleTree } from "@/lib/util";
-import { Card } from "@/components/shared/Card";
-import { DefaultLayout } from "@/components/layouts/Default";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
+
+import { DefaultLayout } from "@/components/layouts/Default";
+import { Card } from "@/components/shared/Card";
+import { generateMerkleTree } from "@/lib/util";
 
 const AuthPage: NextPage = () => {
     const [deployed, setDeployed] = useState(false);
@@ -21,7 +22,7 @@ const AuthPage: NextPage = () => {
         setDeployed(false);
 
         try {
-            const [_uri, _secret] = await generateMerkleTree();
+            const [_uri] = await generateMerkleTree();
             setURI(_uri);
             setDeployed(true);
         } catch (err: unknown) {
@@ -50,19 +51,44 @@ const AuthPage: NextPage = () => {
 
                     <Card>
                         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                        <Card>
+                            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-                        {loading ? (
-                            <div className="flex justify-center">
-                                <progress className="progress w-56"></progress>
-                            </div>
-                        ) : deployed ? (
-                            <h2>Scan the QR code using Google Authenticator</h2>
-                        ) : (
-                            <button onClick={(e) => deploy(e)} className="btn flex align-middle">
-                                Generate Your QR Code
-                            </button>
-                        )}
+                            {loading ? (
+                                <div className="flex justify-center">
+                                    <progress className="progress w-56"></progress>
+                                </div>
+                            ) : deployed ? (
+                                <h2>Scan the QR code using Google Authenticator</h2>
+                            ) : (
+                                <button onClick={(e) => deploy(e)} className="btn flex align-middle">
+                                    Generate Your QR Code
+                                </button>
+                            )}
+                            {loading ? (
+                                <div className="flex justify-center">
+                                    <progress className="progress w-56"></progress>
+                                </div>
+                            ) : deployed ? (
+                                <h2>Scan the QR code using Google Authenticator</h2>
+                            ) : (
+                                <button onClick={(e) => deploy(e)} className="btn flex align-middle">
+                                    Generate Your QR Code
+                                </button>
+                            )}
 
+                            {deployed ? (
+                                <div>
+                                    <img src={uri} width="100%" alt="flux wallet qr code" />
+                                    <div className='px-6 text-center'>
+                                        <input type="text" placeholder="Enter Verification Code" className="input input-bordered w-full max-w-xs" onChange={(e) => setAuthCode(e.target.value)} />
+                                    </div>
+                                    <div className='py-2 items-center justify-center text-center'>
+                                        <label htmlFor="my-modal-6" className="btn" onClick={handleVerify}>Verify</label>
+                                    </div>
+                                </div>
+                            ) : null}
+                        </Card>
                         {deployed ? (
                             <div>
                                 <img src={uri} width="100%" alt="flux wallet qr code" />
