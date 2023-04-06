@@ -12,11 +12,7 @@
     "@account-abstraction/sdk": "^0.2.1",
     "@apollo/client": "^3.6.9",
     "@apollo/react-hooks": "^4.0.0",
-    "@chakra-ui/icons": "^2.0.10",
-    "@chakra-ui/pro-theme": "^0.0.55",
-    "@chakra-ui/react": "^2.3.4",
-    "@emotion/react": "^11",
-    "@emotion/styled": "^11",
+
     "@fontsource/inter": "^4.5.12",
     "@heroicons/react": "^2.0.16",
     "@rainbow-me/rainbowkit": "^0.6.1",
