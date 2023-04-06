@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, FormControl, FormHelperText, FormLabel, Input, Stack, Text } from "@chakra-ui/react";
 import WalletConnect from "@walletconnect/client";
 import { convertHexToUtf8 } from "@walletconnect/utils";
 import { NextPage } from "next";
@@ -112,61 +110,60 @@ const HomePage: NextPage = () => {
   return (
     <DefaultLayout>
       {fluxWalletAddress && (
-        <Stack spacing="8">
-          <Stack spacing="4">
-            <Stack spacing="2">
-              <FormControl>
-                <FormLabel fontSize="md" fontWeight="bold">
+        <div className="space-y-8">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <div>
+                <label className="text-md font-bold">
                   AccountAbstraction Address (ERC 4337)
-                </FormLabel>
-                <Text fontSize="xs">{fluxWalletAddress}</Text>
-              </FormControl>
-            </Stack>
-            {error && <Text color="red.500" fontSize="sm">{error}</Text>}
+                </label>
+                <p className="text-xs">{fluxWalletAddress}</p>
+              </div>
+            </div>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
             {walletConnectMode === "notConnected" && (
-              <Stack spacing="2">
-                <FormControl>
-                  <FormLabel>Wallet Connect</FormLabel>
-                  <Input
+              <div className="space-y-2">
+                <div>
+                  <label className="block mb-2 font-bold font-sans">Wallet Connect</label>
+                  <input
                     type="text"
-                    fontSize="xs"
+                    className="input input-bordered w-full text-xs"
                     value={walletConnectUri}
                     onChange={(e) => setWalletConnectUri(e.target.value)}
                   />
-                  <FormHelperText fontSize="xs" color="blue.600">
+                  <p className="text-xs text-blue-600 mt-1">
                     * input wallet connect url to connect
-                  </FormHelperText>
-                </FormControl>
-                <Button
-                  w="full"
-                  isLoading={isWalletConnectLoading}
+                  </p>
+                </div>
+                <button
+                  className="btn btn-primary w-full"
+                  disabled={!walletConnectUri || isWalletConnectLoading}
                   onClick={connectWalletConnect}
-                  colorScheme="brand"
-                  isDisabled={!walletConnectUri}
                 >
+                  {isWalletConnectLoading ? <span className="loading loading-spinner"></span> : null}
                   Connect
-                </Button>
-              </Stack>
+                </button>
+              </div>
             )}
             {peerMeta && (
-              <Stack spacing="2">
-                <Text fontSize={"xs"}>{peerMeta.url}</Text>
-                <Text fontSize={"xs"}>{peerMeta.name}</Text>
-              </Stack>
+              <div className="space-y-2">
+                <p className="text-xs">{peerMeta.url}</p>
+                <p className="text-xs">{peerMeta.name}</p>
+              </div>
             )}
             {walletConnectMode === "connecting" && (
-              <Stack spacing="2">
-                <Button onClick={approveSession}>{"Approve"}</Button>
-                <Button onClick={rejectSession}>{"Reject"}</Button>
-              </Stack>
+              <div className="space-y-2">
+                <button className="btn btn-primary" onClick={approveSession}>Approve</button>
+                <button className="btn btn-ghost" onClick={rejectSession}>Reject</button>
+              </div>
             )}
             {walletConnectMode === "connected" && (
-              <Stack spacing="2">
-                <Text>Connected</Text>
-              </Stack>
+              <div className="space-y-2">
+                <p>Connected</p>
+              </div>
             )}
-          </Stack>
-        </Stack>
+          </div>
+        </div>
       )}
     </DefaultLayout>
   );
