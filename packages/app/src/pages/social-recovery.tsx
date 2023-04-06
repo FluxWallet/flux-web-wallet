@@ -48,7 +48,7 @@ const HomePage: NextPage = () => {
         {fluxWalletAddress && (
           <div>
             <div className="pt-4 px-4">
-              <h1 className="text-4xl text-white py-4 font-sans">Let's Setup</h1>
+              <h1 className="text-4xl text-white py-4 font-sans">Let&apos;s Setup</h1>
               <h2 className="text-base text-white py-2 pb-10 font-sans"> This Can Save You From  Disaster :) </h2>
             </div>
             <Card>
