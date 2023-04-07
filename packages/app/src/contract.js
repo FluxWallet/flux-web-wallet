@@ -21,17 +21,21 @@ import { HttpRpcClient } from "@account-abstraction/sdk/dist/src/HttpRpcClient";
 import { ethers, providers } from "ethers";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 
-import address from "./artifacts/address.json";
-import OTP from "./artifacts/contracts/OTP.sol/OTP.json";
-import OTPFactory from "./artifacts/contracts/OTPFactory.sol/OTPFactory.json";
+import OTP from "../../contracts/artifacts/contracts/OTP.sol/OTP.json";
+import OTPFactory from "../../contracts/artifacts/contracts/OTPFactory.sol/OTPFactory.json";
 import { generateCalldata } from "./circuit_js/generate_calldata";
 import { useFluxWallet } from "./hooks/useFluxWallet";
-import { FluxWallet__factory } from "./typechain-types/factories/contracts/FluxWallet.sol/FluxWallet__factory";
+import { FluxWallet__factory } from "../../contracts/typechain-types/factories/contracts/FluxWallet.sol/FluxWallet__factory";
 // import { deployments } from 'hardhat';
-import { FluxWalletDeployer__factory } from "./typechain-types/factories/contracts/FluxWalletDeployer__factory";
-import { OTP__factory } from "./typechain-types/factories/contracts/OTP.sol/OTP__factory";
+import { FluxWalletDeployer__factory } from "../../contracts/typechain-types/factories/contracts/FluxWalletDeployer__factory";
+import { OTP__factory } from "../../contracts/typechain-types/factories/contracts/OTP.sol/OTP__factory";
 // import { FluxPaymasterApi } from "./typechain-types/FluxPaymasterApi";
 // import { FluxWalletApi } from "./typechain-types/FluxWalletApi";
+
+const address = {
+  OTPFactory: "0x8bE7560eEb4fF64aB2914ffa573A38f003d9E739",
+  Verifier: "0xAA8De56927542E7Af85AE3F68Fb69594E7cF8613",
+};
 
 
 let factory;

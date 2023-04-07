@@ -1,10 +1,10 @@
 /* global BigInt */
 
-import { groth16 } from 'snarkjs';
-
 import { generateWitness } from './generate_witness';
 
 export async function generateCalldata(input) {
+    const { groth16 } = await import('snarkjs');
+
     let generateWitnessSuccess = true;
 
     const witness = await generateWitness(input).then()
