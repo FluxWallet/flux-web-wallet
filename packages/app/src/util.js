@@ -15,7 +15,7 @@ const urlSuffix = "&issuer=Flux Wallet";
 
 // const VRF_ADDRESS = "0x72B47B0450F10D5Bca027C992DC16f144c84819C"
 
-const auth = 'Basic ' + Buffer.from('2FRdFscdhMnEEfEC3EB24HgJhhw' + ':' + 'bfe3d0e013f89652e10f20c43b81addb').toString('base64');
+const auth = 'Basic ' + Buffer.from(process.env.NEXT_PUBLIC_IPFS_USER + ':' + process.env.NEXT_PUBLIC_IPFS_PASS).toString('base64');
 console.log("Auth:" + auth);
 
 const client = create({
