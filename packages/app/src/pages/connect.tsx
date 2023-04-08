@@ -3,23 +3,19 @@ import { Button, FormControl, FormHelperText, FormLabel, Input, Stack, Text } fr
 import WalletConnect from "@walletconnect/client";
 import { convertHexToUtf8 } from "@walletconnect/utils";
 import { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 
 import { DefaultLayout } from "@/components/layouts/Default";
 import { useFluxWallet } from "@/hooks/useFluxWallet";
 
-export interface PeerMeta {
-  name: string;
-  url: string;
-}
-
 const HomePage: NextPage = () => {
-  const { fluxWalletAddress, entryPoint, fluxWalletAPI, isDeployed } = useFluxWallet();
+  const { fluxWalletAddress, entryPoint, fluxWalletAPI } = useFluxWallet();
   const network = useNetwork();
   const { data: signer } = useSigner();
   const { address } = useAccount();
-  const [connector, setConnector] = useState<WalletConnect>();
+  const connectorRef = useRef<WalletConnect>();
+  const [error, setError] = useState("");
 
   const [walletConnectUri, setWalletConnectUri] = useState("");
   const [isWalletConnectLoading, setIsWalletConnectLoading] = useState(false);
@@ -29,90 +25,85 @@ const HomePage: NextPage = () => {
   const [peerMeta, setPeerMeta] = useState<PeerMeta>();
 
   const connectWalletConnect = async () => {
-    const connector = new WalletConnect({
-      uri: walletConnectUri,
-    });
+    setError("");
+    setIsWalletConnectLoading(true);
+    try {
+      const connector = new WalletConnect({ uri: walletConnectUri });
+      connectorRef.current = connector;
 
-    setConnector(connector);
-    if (!connector.connected) {
-      console.log("walletconnect is not connected");
-      await connector.createSession();
-      console.log("now connected");
-    } else {
-      console.log("walletconnect is already connected");
-      await connector.killSession();
-      console.log("kill previous sesion");
-      console.log("please try agein");
-    }
-
-    connector.on("session_request", (error, payload) => {
-      console.log("session_request", payload);
-      if (error) {
-        throw error;
-      }
-      setPeerMeta(payload.params[0].peerMeta);
-      setWalletConnectMode("connecting");
-    });
-
-    connector.on("call_request", async (error, payload) => {
-      console.log("call_request", payload);
-      if (error) {
-        throw error;
-      }
-      if (payload.method === "personal_sign") {
-        console.log("personal_sign");
-        const message = convertHexToUtf8(payload.params[0]);
-        console.log("message", message);
-        const signature = await signer?.signMessage(message);
-        console.log(signature);
-        const result = connector.approveRequest({
-          id: payload.id,
-          result: signature,
-        });
-        console.log("result", result);
+      if (!connector.connected) {
+        await connector.createSession();
+      } else {
+        await connector.killSession();
       }
 
-      if (payload.method === "eth_sendTransaction") {
-        if (!fluxWalletAPI || !entryPoint || !address) {
+      connector.on("session_request", (error, payload) => {
+        if (error) {
+          setError(error.message);
           return;
         }
-        console.log("eth_sendTransaction");
-        const op = await fluxWalletAPI.createSignedUserOp({
-          target: payload.params[0].to,
-          data: payload.params[0].data,
-          value: payload.params[0].value,
-        });
-        const { hash } = await entryPoint.handleOps([op], address);
-        const result = connector.approveRequest({
-          id: payload.id,
-          result: hash,
-        });
-        console.log("result", result);
-      }
-    });
+        setPeerMeta(payload.params[0].peerMeta);
+        setWalletConnectMode("connecting");
+      });
 
-    connector.on("disconnect", (error, payload) => {
-      console.log("disconnect", payload);
-      if (error) {
-        throw error;
-      }
-    });
+      connector.on("call_request", async (error, payload) => {
+        if (error) {
+          setError(error.message);
+          return;
+        }
+        try {
+          if (payload.method === "personal_sign") {
+            const message = convertHexToUtf8(payload.params[0]);
+            const signature = await signer?.signMessage(message);
+            await connector.approveRequest({ id: payload.id, result: signature });
+          }
+
+          if (payload.method === "eth_sendTransaction") {
+            if (!fluxWalletAPI || !entryPoint || !address) return;
+            const op = await fluxWalletAPI.createSignedUserOp({
+              target: payload.params[0].to,
+              data: payload.params[0].data,
+              value: payload.params[0].value,
+            });
+            const { hash } = await entryPoint.handleOps([op], address);
+            await connector.approveRequest({ id: payload.id, result: hash });
+          }
+        } catch (err: unknown) {
+          setError(err instanceof Error ? err.message : String(err));
+        }
+      });
+
+      connector.on("disconnect", (error) => {
+        if (error) setError(error.message);
+        setWalletConnectMode("notConnected");
+      });
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setIsWalletConnectLoading(false);
+    }
   };
 
+  useEffect(() => {
+    return () => {
+      if (connectorRef.current) {
+        connectorRef.current.on("disconnect", () => { /* cleanup */ });
+        connectorRef.current.on("session_request", () => { /* cleanup */ });
+        connectorRef.current.on("call_request", () => { /* cleanup */ });
+      }
+    };
+  }, []);
+
   const approveSession = () => {
-    console.log("approveSession");
-    if (!connector || !network.chain) {
-      return;
-    }
+    const connector = connectorRef.current;
+    if (!connector || !network.chain) return;
     connector.approveSession({ chainId: network.chain.id, accounts: [fluxWalletAddress] });
     setWalletConnectMode("connected");
   };
 
   const rejectSession = () => {
-    console.log("rejectSession");
-    if (!connector) {
-      return;
-    }
+    const connector = connectorRef.current;
+    if (!connector) return;
     connector.rejectSession();
   };
 
@@ -124,15 +115,16 @@ const HomePage: NextPage = () => {
             <Stack spacing="2">
               <FormControl>
                 <FormLabel fontSize="md" fontWeight="bold">
-                  AcountAbstraction Address (ERC 4337)
+                  AccountAbstraction Address (ERC 4337)
                 </FormLabel>
                 <Text fontSize="xs">{fluxWalletAddress}</Text>
               </FormControl>
             </Stack>
+            {error && <Text color="red.500" fontSize="sm">{error}</Text>}
             {walletConnectMode === "notConnected" && (
               <Stack spacing="2">
                 <FormControl>
-                  <FormLabel>Walelt Connect</FormLabel>
+                  <FormLabel>Wallet Connect</FormLabel>
                   <Input
                     type="text"
                     fontSize="xs"
