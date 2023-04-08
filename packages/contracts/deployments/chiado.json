@@ -1,1 +1,5 @@
-{"factory":"0x33a15964328a3419ec55f6192fccb81a3e3861e2","sampleRecipient":"0xBf74142818c2e5E42F7f7349a1Af02a1Dcd5814D","signerAddress":"0xdeaa150597535Eed8c95Ad090757815F1B9Da15d"}
+{
+  "factory": "0x33a15964328a3419ec55f6192fccb81a3e3861e2",
+  "sampleRecipient": "0xBf74142818c2e5E42F7f7349a1Af02a1Dcd5814D",
+  "signerAddress": "0xdeaa150597535Eed8c95Ad090757815F1B9Da15d"
+}

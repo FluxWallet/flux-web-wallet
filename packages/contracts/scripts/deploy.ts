@@ -35,7 +35,14 @@ async function main() {
   const verifier = await Verifier.deploy();
   console.log('verifier :', verifier.address);
 
-  fs.writeFileSync(path.join(__dirname, `../deployments/${network.name}.json`), JSON.stringify(result));
+  fs.writeFileSync(
+    path.join(__dirname, `../deployments/${network.name}.json`),
+    JSON.stringify({
+      ...result,
+      otpFactory: oTPFactory.address,
+      verifier: verifier.address,
+    })
+  );
 }
 
 

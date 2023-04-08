@@ -1,1 +1,5 @@
-{"entryPoint":"0xB890B15AF9bF4edcE2d39D5Ef321D33d876f8378","factory":"0xa2b9773c8ddc3dcac62432a874c41201da2f01bf","sampleRecipient":"0xD323F33a1E2a751344CFDE86e69c73AAe41025ef"}
+{
+  "entryPoint": "0xB890B15AF9bF4edcE2d39D5Ef321D33d876f8378",
+  "factory": "0xa2b9773c8ddc3dcac62432a874c41201da2f01bf",
+  "sampleRecipient": "0xD323F33a1E2a751344CFDE86e69c73AAe41025ef"
+}
