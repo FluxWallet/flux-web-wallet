@@ -19,7 +19,7 @@ export const rainbowWeb3AuthConnector = ({ chains }: RainbowWeb3AuthConnectorPro
       const connector = new Web3AuthConnector({
         chains,
         options: {
-          clientId: process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID,
+          clientId: process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID as string,
           network: "testnet",
           chainId: "0x5",
           socialLoginConfig: {

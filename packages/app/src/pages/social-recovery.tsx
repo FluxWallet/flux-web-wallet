@@ -36,7 +36,7 @@ const HomePage: NextPage = () => {
       const message = err instanceof Error ? err.message : String(err);
       setTxError(message);
     } finally {
-      setTxLoading(null);
+      setTxLoading(false);
     }
   };
 

@@ -8,6 +8,7 @@ import { useAccount, useNetwork, useSigner } from "wagmi";
 
 import { DefaultLayout } from "@/components/layouts/Default";
 import { useFluxWallet } from "@/hooks/useFluxWallet";
+import type { PeerMeta } from "@/types";
 
 const HomePage: NextPage = () => {
   const { fluxWalletAddress, entryPoint, fluxWalletAPI } = useFluxWallet();
@@ -87,9 +88,10 @@ const HomePage: NextPage = () => {
   useEffect(() => {
     return () => {
       if (connectorRef.current) {
-        connectorRef.current.on("disconnect", () => { /* cleanup */ });
-        connectorRef.current.on("session_request", () => { /* cleanup */ });
-        connectorRef.current.on("call_request", () => { /* cleanup */ });
+        const c = connectorRef.current;
+        c.on("disconnect", () => undefined);
+        c.on("session_request", () => undefined);
+        c.on("call_request", () => undefined);
       }
     };
   }, []);
