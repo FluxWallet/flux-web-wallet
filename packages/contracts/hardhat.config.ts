@@ -39,17 +39,17 @@ const config: HardhatUserConfig = {
       allowUnlimitedContractSize: true,
     },
     goerli: {
-      url: "https://eth-goerli.g.alchemy.com/v2/dIapWnteM78mUNXiFdEoJb6F9-6w2-hT",
+      url: `https://eth-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_GOERLI_KEY ?? ""}`,
       accounts,
       allowUnlimitedContractSize: true,
     },
     sepolia: {
-      url: "https://eth-sepolia.g.alchemy.com/v2/Kd1XQbFAa3ZboKORKFNQ9mmtcrM5PbZv",
+      url: `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_SEPOLIA_KEY ?? ""}`,
       accounts,
       allowUnlimitedContractSize: true,
     },
     mumbai: {
-      url: "https://polygon-mumbai.g.alchemy.com/v2/vzOwiL7MTT2bjnZozNtemIWyq0zC6oYW",
+      url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_MUMBAI_KEY ?? ""}`,
       accounts,
       allowUnlimitedContractSize: true,
     },
