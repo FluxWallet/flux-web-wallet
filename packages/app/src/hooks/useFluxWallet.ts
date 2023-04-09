@@ -5,26 +5,23 @@ import { EntryPoint, EntryPoint__factory } from "@account-abstraction/contracts"
 import { useEffect, useState } from "react";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 
-// import { generateMerkleTree } from "@/util";
+import type { Deployments } from "@/types";
+
 import { FluxWalletAPI } from "../../../contracts/lib/FluxWalletAPI";
 import { FluxWallet, FluxWallet__factory } from "../../../contracts/typechain-types";
-
-// console.log(generateMerkleTree)
 
 export const useFluxWallet = () => {
   const { data: signer } = useSigner();
   const { isConnected, address } = useAccount();
+  const connectedNetwork = useNetwork();
 
-  const network = useNetwork();
   const [fluxWalletAPI, setFluxWalletAPI] = useState<FluxWalletAPI>();
   const [fluxWalletAddress, setFluxWalletAddress] = useState("");
   const [isDeployed, setIsDeployed] = useState(false);
   const [entryPoint, setEntryPoint] = useState<EntryPoint>();
   const [contract, setContract] = useState<FluxWallet>();
   const [ownerWallet, setOwnerWallet] = useState("");
-
   const [balance, setBalance] = useState("0");
-  // console.log("Signer:", ownerWallet);
 
   useEffect(() => {
     if (!signer || !isConnected) {
@@ -35,68 +32,48 @@ export const useFluxWallet = () => {
 
     window.localStorage.setItem("debug", "aa*");
 
-    const connectedNetwork = network.chain?.network ? network.chain.network : "goerli";
-    if (connectedNetwork !== "localhost" && connectedNetwork !== "goerli") {
+    const networkName = connectedNetwork.chain?.network ?? "goerli";
+    if (networkName !== "localhost" && networkName !== "goerli") {
       alert("please connect goerli network!");
       return;
     }
-    import(`../../../contracts/deployments/${connectedNetwork}.json`).then((deployments) => {
-      const fluxWalletAPI = new FluxWalletAPI({
-        // assuming if signer is not null, provider is also not null
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        provider: signer.provider!,
-        entryPointAddress: deployments.entryPoint,
-        owner: signer,
-        factoryAddress: deployments.factory,
-      });
-      setFluxWalletAPI(fluxWalletAPI);
-      console.log("fluxwalletapi", fluxWalletAPI);
 
-      // eslint-disable-next-line no-use-before-define
-      const fluxWalletAddress = window.localStorage.getItem(`${address}:connectedNetwork`);
-
-      if (!fluxWalletAddress) {
-        // get create2 address when init the app
-        fluxWalletAPI.getWalletAddress().then((fluxWalletAddress) => {
-          window.localStorage.setItem(`${address}:connectedNetwork`, fluxWalletAddress);
-          setFluxWalletAddress(fluxWalletAddress);
-          signer.provider!.getCode(fluxWalletAddress).then((code) => setIsDeployed(code !== "0x"));
-          const contract = FluxWallet__factory.connect(fluxWalletAddress, signer);
-          setContract(contract);
-          signer.provider?.getBalance(fluxWalletAddress).then((balance) => setBalance(balance.toString()));
+    import(`../../../contracts/deployments/${networkName}.json`)
+      .then((deployments) => {
+        const dep = deployments as unknown as Deployments;
+        const api = new FluxWalletAPI({
+          provider: signer.provider!,
+          entryPointAddress: dep.entryPoint,
+          owner: signer,
+          factoryAddress: dep.factory,
         });
-      } else {
-        setFluxWalletAddress(fluxWalletAddress);
-        signer.provider!.getCode(fluxWalletAddress).then((code) => setIsDeployed(code !== "0x"));
-        const contract = FluxWallet__factory.connect(fluxWalletAddress, signer);
-        setContract(contract);
-        signer?.getAddress().then(result => setOwnerWallet(result));
+        setFluxWalletAPI(api);
+        setEntryPoint(EntryPoint__factory.connect(dep.entryPoint, signer));
 
+        const cachedAddress = window.localStorage.getItem(`${address}:${networkName}`);
 
-        signer.provider?.getBalance(fluxWalletAddress).then((balance) => setBalance(balance.toString()));
-      }
-
-      // assuming if signer is not null, provider is also not null
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const entryPoint = EntryPoint__factory.connect(deployments.entryPoint, signer);
-      setEntryPoint(entryPoint);
-    });
-  }, [signer, network.chain, isConnected, address]);
+        if (cachedAddress) {
+          setFluxWalletAddress(cachedAddress);
+          signer.provider!.getCode(cachedAddress).then((code) => setIsDeployed(code !== "0x"));
+          const c = FluxWallet__factory.connect(cachedAddress, signer);
+          setContract(c);
+          signer?.getAddress().then((result) => setOwnerWallet(result));
+          signer.provider?.getBalance(cachedAddress).then((bal) => setBalance(bal.toString()));
+        } else {
+          api.getWalletAddress().then((addr) => {
+            window.localStorage.setItem(`${address}:${networkName}`, addr);
+            setFluxWalletAddress(addr);
+            signer.provider!.getCode(addr).then((code) => setIsDeployed(code !== "0x"));
+            const c = FluxWallet__factory.connect(addr, signer);
+            setContract(c);
+            signer.provider?.getBalance(addr).then((bal) => setBalance(bal.toString()));
+          });
+        }
+      })
+      .catch((err) => {
+        console.error(`Failed to load deployment config for ${networkName}:`, err);
+      });
+  }, [signer, connectedNetwork.chain?.network, isConnected, address]);
 
   return { entryPoint, fluxWalletAPI, fluxWalletAddress, isDeployed, contract, balance, ownerWallet };
 };
-
-// export const useQrCode = () => {
-//   const [_uri, _secret, root] = await generateMerkleTree();
-//   console.log("Seturi12:")
-
-//   console.log(`root1: ${root}`)
-//   setSecret(_secret);
-//   setURI(_uri);
-//   console.log("Seturi :", setURI)
-//   console.log()
-//   console.log("URI" + uri)
-
-//   return { uri }
-// }
-
