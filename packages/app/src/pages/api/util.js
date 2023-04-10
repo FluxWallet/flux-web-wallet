@@ -16,7 +16,6 @@ const urlSuffix = "&issuer=Flux Wallet";
 // const VRF_ADDRESS = "0x72B47B0450F10D5Bca027C992DC16f144c84819C"
 
 const auth = 'Basic ' + Buffer.from(process.env.NEXT_PUBLIC_IPFS_USER + ':' + process.env.NEXT_PUBLIC_IPFS_PASS).toString('base64');
-console.log("Auth:" + auth);
 
 const client = create({
     host: 'ipfs.infura.io',
@@ -49,6 +48,9 @@ async function generateSecret(signer, length = 20) {
 }
 
 export async function generateMerkleTree() {
+    if (typeof window === "undefined") {
+        throw new Error("generateMerkleTree can only be called in browser environment");
+    }
     const { ethereum } = window;
 
     const provider = new ethers.providers.Web3Provider(ethereum);
@@ -89,13 +91,15 @@ export async function generateMerkleTree() {
         console.log(err);
     }
     console.log("Hashes on IPFS", fileData)
-    let IPFS_CIDS = localStorage.getItem("IPFS_CIDS");
-    if (!IPFS_CIDS) {
-        IPFS_CIDS = [];
+    let IPFS_CIDS = [];
+    const stored = localStorage.getItem("IPFS_CIDS");
+    if (stored) {
+        try { IPFS_CIDS = JSON.parse(stored); } catch { IPFS_CIDS = []; }
     }
-    localStorage.setItem("IPFS_CIDS", IPFS_CIDS.push(fileData));
-    localStorage.setItem("OTPhashes", hashes);
-    localStorage.setItem("MerkleRoot", root);
+    if (fileData) IPFS_CIDS.push(fileData);
+    localStorage.setItem("IPFS_CIDS", JSON.stringify(IPFS_CIDS));
+    localStorage.setItem("OTPhashes", hashes.map(String).join(","));
+    localStorage.setItem("MerkleRoot", String(root));
 
     const r = localStorage.getItem("MerkleRoot");
     console.log(`fetched root: ${r}`)

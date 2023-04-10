@@ -68,10 +68,10 @@ export async function generateMerkleTree(): Promise<[uri: string, secret: string
     console.error(err);
   }
 
-  localStorage.setItem("OTPhashes", hashes as unknown as string);
-  localStorage.setItem("MerkleRoot", root as unknown as string);
+  localStorage.setItem("OTPhashes", hashes.map(String).join(","));
+  localStorage.setItem("MerkleRoot", root.toString());
 
-  return [uri, SECRET, root as unknown as string];
+  return [uri, SECRET, root.toString()];
 }
 
 export async function generateInput(otp: string): Promise<{
