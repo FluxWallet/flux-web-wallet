@@ -11,10 +11,28 @@ async function buildWitness(input) {
     return witnessBuilder.calculateWTNSBin(input, 0);
 }
 
+function setCORS(response) {
+    response.setHeader('Access-Control-Allow-Origin', process.env.CORS_ORIGIN || '*');
+    response.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    response.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-api-key');
+}
+
 export default async function handler(request, response) {
+    setCORS(response);
+
+    if (request.method === 'OPTIONS') {
+        return response.status(204).end();
+    }
+
     if (request.method !== 'POST') {
         response.setHeader('Allow', ['POST']);
         return response.status(405).json({ error: 'Method not allowed' });
+    }
+
+    const apiKey = request.headers['x-api-key'];
+    const expectedKey = process.env.API_SECRET_KEY;
+    if (expectedKey && apiKey !== expectedKey) {
+        return response.status(401).json({ error: 'Unauthorized' });
     }
 
     try {
@@ -23,6 +41,10 @@ export default async function handler(request, response) {
 
         if (!input) {
             return response.status(400).json({ error: 'Missing circuit input' });
+        }
+
+        if (Buffer.byteLength(JSON.stringify(request.body), 'utf-8') > 1024 * 100) {
+            return response.status(413).json({ error: 'Request body too large' });
         }
 
         const witness = await buildWitness(input);
