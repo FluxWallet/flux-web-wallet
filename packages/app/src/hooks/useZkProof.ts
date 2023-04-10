@@ -16,7 +16,10 @@ export const useZkProof = () => {
       throw new Error("Signer not available");
     }
 
-    const scwAddress = localStorage.getItem("scwAddress") || "0x33a15964328a3419ec55f6192fccb81a3e3861e2";
+    const scwAddress = localStorage.getItem("scwAddress") || process.env.NEXT_PUBLIC_SCW_ADDRESS || "";
+    if (!scwAddress) {
+      throw new Error("SCW address not found. Set NEXT_PUBLIC_SCW_ADDRESS or deploy a wallet.");
+    }
     const scw = new ethers.Contract(
       scwAddress,
       FluxWallet__factory.abi,
