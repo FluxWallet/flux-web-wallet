@@ -113,6 +113,7 @@ export async function generateInput(otp: string): Promise<{
     }
   }
 
+  // eslint-disable-next-line camelcase
   return {
     time: currentTime,
     otp,
