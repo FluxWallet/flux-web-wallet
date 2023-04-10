@@ -1,16 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable camelcase */
-
-import { ethers } from "ethers";
-import { NextPage } from "next";
-import Image from 'next/image'
-import { useState } from 'react'
-
+import { generateInput } from "@/lib/util";
 import { DefaultLayout } from "@/components/layouts/Default";
 import { useFluxWallet } from "@/hooks/useFluxWallet";
 import { useZkProof } from "@/hooks/useZkProof";
-
-import { generateInput } from "../util";
+import { NextPage } from "next";
+import Image from 'next/image'
+import { useState } from 'react'
 import profile from './../static/profile.webp'
 
 const Send: NextPage = () => {

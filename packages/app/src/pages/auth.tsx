@@ -1,13 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable camelcase */
-
+import { generateMerkleTree } from "@/lib/util";
+import { Card } from "@/components/shared/Card";
+import { DefaultLayout } from "@/components/layouts/Default";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
-import { DefaultLayout } from "@/components/layouts/Default";
-
-import { generateMerkleTree } from "../util";
 
 const AuthPage: NextPage = () => {
     const [deployed, setDeployed] = useState(false);
@@ -52,37 +48,33 @@ const AuthPage: NextPage = () => {
                         <h2 className="text-base text-white py-2 pb-10 font-sans"> Its time to secure you !</h2>
                     </div>
 
-                    <div className='bg-white rounded-[16px] object-contain w-[320px] h-[480px] relative'>
-                        <div className="flex h-full items-center justify-center px-4 inset-x-0 bottom-0">
-                            <div className="w-full">
-                                {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                    <Card>
+                        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-                                {loading ? (
-                                    <div className="flex justify-center">
-                                        <progress className="progress w-56"></progress>
-                                    </div>
-                                ) : deployed ? (
-                                    <h2>Scan the QR code using Google Authenticator</h2>
-                                ) : (
-                                    <button onClick={(e) => deploy(e)} className="btn flex align-middle">
-                                        Generate Your QR Code
-                                    </button>
-                                )}
-
-                                {deployed ? (
-                                    <div>
-                                        <img src={uri} width="100%" alt="flux wallet qr code" />
-                                        <div className='px-6 text-center'>
-                                            <input type="text" placeholder="Enter Verification Code" className="input input-bordered w-full max-w-xs" onChange={(e) => setAuthCode(e.target.value)} />
-                                        </div>
-                                        <div className='py-2 items-center justify-center text-center'>
-                                            <label htmlFor="my-modal-6" className="btn" onClick={handleVerify}>Verify</label>
-                                        </div>
-                                    </div>
-                                ) : null}
+                        {loading ? (
+                            <div className="flex justify-center">
+                                <progress className="progress w-56"></progress>
                             </div>
-                        </div>
-                    </div>
+                        ) : deployed ? (
+                            <h2>Scan the QR code using Google Authenticator</h2>
+                        ) : (
+                            <button onClick={(e) => deploy(e)} className="btn flex align-middle">
+                                Generate Your QR Code
+                            </button>
+                        )}
+
+                        {deployed ? (
+                            <div>
+                                <img src={uri} width="100%" alt="flux wallet qr code" />
+                                <div className='px-6 text-center'>
+                                    <input type="text" placeholder="Enter Verification Code" className="input input-bordered w-full max-w-xs" onChange={(e) => setAuthCode(e.target.value)} />
+                                </div>
+                                <div className='py-2 items-center justify-center text-center'>
+                                    <label htmlFor="my-modal-6" className="btn" onClick={handleVerify}>Verify</label>
+                                </div>
+                            </div>
+                        ) : null}
+                    </Card>
                 </div>
             </div>
         </DefaultLayout >
