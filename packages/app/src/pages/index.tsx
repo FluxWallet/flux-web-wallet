@@ -13,7 +13,7 @@ import { NULL_ADDRESS, NULL_BYTES } from "../../../contracts/lib/utils";
 import { FluxWallet__factory } from "../../../contracts/typechain-types";
 
 const HomePage: NextPage = () => {
-  const { fluxWalletAddress, entryPoint, fluxWalletAPI, isDeployed, balance, ownerWallet } = useFluxWallet();
+  const { fluxWalletAddress, entryPoint, fluxWalletAPI, isDeployed, balance } = useFluxWallet();
 
   const router = useRouter();
 

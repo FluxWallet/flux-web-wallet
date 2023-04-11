@@ -25,7 +25,7 @@ const Send: NextPage = () => {
     const [errorMsg, setErrorMsg] = useState("");
     const [verifying, setVerifying] = useState(false);
 
-    const { fluxWalletAddress, balance, ownerWallet } = useFluxWallet()
+    const { fluxWalletAddress } = useFluxWallet()
     const { prove } = useZkProof();
     const scwAddress = fluxWalletAddress;
 

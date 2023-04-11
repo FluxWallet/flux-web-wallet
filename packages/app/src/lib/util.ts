@@ -98,8 +98,12 @@ export async function generateInput(otp: string): Promise<{
   const pathElements: bigint[] = [];
   const pathIndex: number[] = [];
 
+  const hashIndex = new Map<bigint, number>();
+  hashes.forEach((h, i) => hashIndex.set(h, i));
+
   for (let i = 0; i < 7; i++) {
-    const idx = hashes.findIndex((h) => h === currentNode);
+    const idx = hashIndex.get(currentNode);
+    if (idx === undefined) throw new Error("Node not found in hash tree.");
     if (idx % 2 === 0) {
       pathIndex.push(0);
       const currentIndex = idx + 1;
