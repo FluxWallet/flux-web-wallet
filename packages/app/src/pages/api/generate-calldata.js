@@ -1,16 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 
-import witnessCalculator from '../../circuit_js/witness_calculator';
-
-async function buildWitness(input) {
-    const wasmPath = path.join(process.cwd(), 'public', 'circuit.wasm');
-    const wasmBuffer = fs.readFileSync(wasmPath);
-
-    const witnessBuilder = await witnessCalculator(wasmBuffer);
-    return witnessBuilder.calculateWTNSBin(input, 0);
-}
-
 function setCORS(response) {
     response.setHeader('Access-Control-Allow-Origin', process.env.CORS_ORIGIN || '*');
     response.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -37,6 +27,7 @@ export default async function handler(request, response) {
 
     try {
         const { groth16 } = await import('snarkjs');
+        const { default: witnessCalculator } = await import('../../circuit_js/witness_calculator');
         const input = request.body?.input;
 
         if (!input) {
@@ -47,7 +38,10 @@ export default async function handler(request, response) {
             return response.status(413).json({ error: 'Request body too large' });
         }
 
-        const witness = await buildWitness(input);
+        const wasmPath = path.join(process.cwd(), 'public', 'circuit.wasm');
+        const wasmBuffer = fs.readFileSync(wasmPath);
+        const witnessBuilder = await witnessCalculator(wasmBuffer);
+        const witness = witnessBuilder.calculateWTNSBin(input, 0);
         const zkeyPath = path.join(process.cwd(), 'public', 'circuit_final.zkey');
         const { proof, publicSignals } = await groth16.prove(zkeyPath, witness);
         const calldata = await groth16.exportSolidityCallData(proof, publicSignals);
