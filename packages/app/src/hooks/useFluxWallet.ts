@@ -5,6 +5,7 @@ import { EntryPoint, EntryPoint__factory } from "@account-abstraction/contracts"
 import { useEffect, useState } from "react";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 
+import deploymentsConfig from "@/config/deployments.json";
 import type { Deployments } from "@/types";
 
 import { FluxWalletAPI } from "../../../contracts/lib/FluxWalletAPI";
@@ -38,41 +39,44 @@ export const useFluxWallet = () => {
       return;
     }
 
-    import(`../../../contracts/deployments/${networkName}.json`)
-      .then((deployments) => {
-        const dep = deployments as unknown as Deployments;
-        const api = new FluxWalletAPI({
-          provider: signer.provider!,
-          entryPointAddress: dep.entryPoint,
-          owner: signer,
-          factoryAddress: dep.factory,
-        });
-        setFluxWalletAPI(api);
-        setEntryPoint(EntryPoint__factory.connect(dep.entryPoint, signer));
+    const dep = (deploymentsConfig as Record<string, Deployments | undefined>)[networkName];
+    if (!dep) {
+      console.error(`No deployment config for ${networkName}`);
+      return;
+    }
+    if (!dep.entryPoint) {
+      console.error(`EntryPoint address not configured for ${networkName}`);
+      return;
+    }
 
-        const cachedAddress = window.localStorage.getItem(`${address}:${networkName}`);
+    const api = new FluxWalletAPI({
+      provider: signer.provider!,
+      entryPointAddress: dep.entryPoint,
+      owner: signer,
+      factoryAddress: dep.factory,
+    });
+    setFluxWalletAPI(api);
+    setEntryPoint(EntryPoint__factory.connect(dep.entryPoint, signer));
 
-        if (cachedAddress) {
-          setFluxWalletAddress(cachedAddress);
-          signer.provider!.getCode(cachedAddress).then((code) => setIsDeployed(code !== "0x"));
-          const c = FluxWallet__factory.connect(cachedAddress, signer);
-          setContract(c);
-          signer?.getAddress().then((result) => setOwnerWallet(result));
-          signer.provider?.getBalance(cachedAddress).then((bal) => setBalance(bal.toString()));
-        } else {
-          api.getWalletAddress().then((addr) => {
-            window.localStorage.setItem(`${address}:${networkName}`, addr);
-            setFluxWalletAddress(addr);
-            signer.provider!.getCode(addr).then((code) => setIsDeployed(code !== "0x"));
-            const c = FluxWallet__factory.connect(addr, signer);
-            setContract(c);
-            signer.provider?.getBalance(addr).then((bal) => setBalance(bal.toString()));
-          });
-        }
-      })
-      .catch((err) => {
-        console.error(`Failed to load deployment config for ${networkName}:`, err);
+    const cachedAddress = window.localStorage.getItem(`${address}:${networkName}`);
+
+    if (cachedAddress) {
+      setFluxWalletAddress(cachedAddress);
+      signer.provider!.getCode(cachedAddress).then((code) => setIsDeployed(code !== "0x"));
+      const c = FluxWallet__factory.connect(cachedAddress, signer);
+      setContract(c);
+      signer?.getAddress().then((result) => setOwnerWallet(result));
+      signer.provider?.getBalance(cachedAddress).then((bal) => setBalance(bal.toString()));
+    } else {
+      api.getWalletAddress().then((addr) => {
+        window.localStorage.setItem(`${address}:${networkName}`, addr);
+        setFluxWalletAddress(addr);
+        signer.provider!.getCode(addr).then((code) => setIsDeployed(code !== "0x"));
+        const c = FluxWallet__factory.connect(addr, signer);
+        setContract(c);
+        signer.provider?.getBalance(addr).then((bal) => setBalance(bal.toString()));
       });
+    }
   }, [signer, connectedNetwork.chain?.network, isConnected, address]);
 
   return { entryPoint, fluxWalletAPI, fluxWalletAddress, isDeployed, contract, balance, ownerWallet };

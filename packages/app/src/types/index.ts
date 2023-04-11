@@ -4,6 +4,6 @@ export interface PeerMeta {
 }
 
 export interface Deployments {
-  entryPoint: string;
+  entryPoint?: string;
   factory: string;
 }

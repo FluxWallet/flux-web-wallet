@@ -1,0 +1,16 @@
+{
+  "goerli": {
+    "entryPoint": "0xB890B15AF9bF4edcE2d39D5Ef321D33d876f8378",
+    "factory": "0xa2b9773c8ddc3dcac62432a874c41201da2f01bf",
+    "sampleRecipient": "0xD323F33a1E2a751344CFDE86e69c73AAe41025ef"
+  },
+  "sepolia": {
+    "entryPoint": "0x43ccc7277E12d6dD3363B9897e0cf5BB22e93735",
+    "factory": "0xfaf2900c2063573f2faa347d0f5e735f403eb66a",
+    "sampleRecipient": "0x72c186Fbff451a87E2b538219BC6Ffefd19F7aEA"
+  },
+  "chiado": {
+    "factory": "0x33a15964328a3419ec55f6192fccb81a3e3861e2",
+    "sampleRecipient": "0xBf74142818c2e5E42F7f7349a1Af02a1Dcd5814D"
+  }
+}
