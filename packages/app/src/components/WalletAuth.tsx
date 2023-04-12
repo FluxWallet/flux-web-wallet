@@ -2,13 +2,9 @@
 // import qrcode from 'qrcode';
 // import speakeasy from 'speakeasy';
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 const WalletAuth = () => {
-    const [qr, setqr] = useState([]);
-    const [auth, setAuth] = useState("000000");
-    const [secret, setSecret] = useState();
-
     const router = useRouter();
 
     // useEffect(() => {
@@ -56,7 +52,7 @@ const WalletAuth = () => {
             height={400} style={{ objectFit: "contain" }} /> */}
         {/* <WalletAuthVerify/> */}
         <div className='px-6 text-center'>
-            <input type="String" placeholder="Enter Verification Code" className="input input-bordered w-full max-w-xs" onChange={(e) => setAuth(e.target.value)} />
+            <input type="String" placeholder="Enter Verification Code" className="input input-bordered w-full max-w-xs" />
         </div>
 
         {/* <label htmlFor="address">

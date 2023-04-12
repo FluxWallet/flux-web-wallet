@@ -41,7 +41,7 @@ export default async function handler(request, response) {
         const wasmPath = path.join(process.cwd(), 'public', 'circuit.wasm');
         const wasmBuffer = fs.readFileSync(wasmPath);
         const witnessBuilder = await witnessCalculator(wasmBuffer);
-        const witness = witnessBuilder.calculateWTNSBin(input, 0);
+        const witness = await witnessBuilder.calculateWTNSBin(input, 0);
         const zkeyPath = path.join(process.cwd(), 'public', 'circuit_final.zkey');
         const { proof, publicSignals } = await groth16.prove(zkeyPath, witness);
         const calldata = await groth16.exportSolidityCallData(proof, publicSignals);

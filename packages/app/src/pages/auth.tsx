@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -79,7 +80,7 @@ const AuthPage: NextPage = () => {
 
                             {deployed ? (
                                 <div>
-                                    <img src={uri} width="100%" alt="flux wallet qr code" />
+                                    <Image src={uri} width={400} height={400} alt="flux wallet qr code" unoptimized />
                                     <div className='px-6 text-center'>
                                         <input type="text" placeholder="Enter Verification Code" className="input input-bordered w-full max-w-xs" onChange={(e) => setAuthCode(e.target.value)} />
                                     </div>
@@ -91,7 +92,7 @@ const AuthPage: NextPage = () => {
                         </Card>
                         {deployed ? (
                             <div>
-                                <img src={uri} width="100%" alt="flux wallet qr code" />
+                                <Image src={uri} width={400} height={400} alt="flux wallet qr code" unoptimized />
                                 <div className='px-6 text-center'>
                                     <input type="text" placeholder="Enter Verification Code" className="input input-bordered w-full max-w-xs" onChange={(e) => setAuthCode(e.target.value)} />
                                 </div>
