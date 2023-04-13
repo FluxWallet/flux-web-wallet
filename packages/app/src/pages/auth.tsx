@@ -52,44 +52,19 @@ const AuthPage: NextPage = () => {
 
                     <Card>
                         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-                        <Card>
-                            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-                            {loading ? (
-                                <div className="flex justify-center">
-                                    <progress className="progress w-56"></progress>
-                                </div>
-                            ) : deployed ? (
-                                <h2>Scan the QR code using Google Authenticator</h2>
-                            ) : (
-                                <button onClick={(e) => deploy(e)} className="btn flex align-middle">
-                                    Generate Your QR Code
-                                </button>
-                            )}
-                            {loading ? (
-                                <div className="flex justify-center">
-                                    <progress className="progress w-56"></progress>
-                                </div>
-                            ) : deployed ? (
-                                <h2>Scan the QR code using Google Authenticator</h2>
-                            ) : (
-                                <button onClick={(e) => deploy(e)} className="btn flex align-middle">
-                                    Generate Your QR Code
-                                </button>
-                            )}
+                        {loading ? (
+                            <div className="flex justify-center">
+                                <progress className="progress w-56"></progress>
+                            </div>
+                        ) : deployed ? (
+                            <h2>Scan the QR code using Google Authenticator</h2>
+                        ) : (
+                            <button onClick={(e) => deploy(e)} className="btn flex align-middle">
+                                Generate Your QR Code
+                            </button>
+                        )}
 
-                            {deployed ? (
-                                <div>
-                                    <Image src={uri} width={400} height={400} alt="flux wallet qr code" unoptimized />
-                                    <div className='px-6 text-center'>
-                                        <input type="text" placeholder="Enter Verification Code" className="input input-bordered w-full max-w-xs" onChange={(e) => setAuthCode(e.target.value)} />
-                                    </div>
-                                    <div className='py-2 items-center justify-center text-center'>
-                                        <label htmlFor="my-modal-6" className="btn" onClick={handleVerify}>Verify</label>
-                                    </div>
-                                </div>
-                            ) : null}
-                        </Card>
                         {deployed ? (
                             <div>
                                 <Image src={uri} width={400} height={400} alt="flux wallet qr code" unoptimized />

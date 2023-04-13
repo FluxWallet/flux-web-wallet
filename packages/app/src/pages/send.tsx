@@ -7,7 +7,7 @@ import { useFluxWallet } from "@/hooks/useFluxWallet";
 import { useZkProof } from "@/hooks/useZkProof";
 import { generateInput } from "@/lib/util";
 
-import profile from './../static/profile.webp'
+const PROFILE_SRC = "/profile.webp"
 
 const Send: NextPage = () => {
 
@@ -36,7 +36,7 @@ const Send: NextPage = () => {
         setVerifying(true);
 
         if (!localStorage.getItem("OTPhashes")) {
-            setErrorMsg("No OTP contract address found. Deploy first.");
+            setErrorMsg("No OTP data found. Authenticate first.");
             setError(true);
             setVerifying(false);
             return;
@@ -56,7 +56,6 @@ const Send: NextPage = () => {
             setVerifying(false);
         }
 
-        event.preventDefault();
     }
 
     const aHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +80,7 @@ const Send: NextPage = () => {
                     <div className='pt-8 px-4'>
                         <div className="relative flex row">
                             <div className="w-10 h-10 p-1 rounded-full border-2 border-indigo-500/100">
-                                <Image className="w-10 h-10 rounded-full" src={profile} alt="" />
+                                <Image className="w-10 h-10 rounded-full" src={PROFILE_SRC} width={40} height={40} alt="" />
                             </div>
                             <span className="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
                             <div className='px-4 items-center'>
@@ -105,8 +104,8 @@ const Send: NextPage = () => {
                                 </div>
                                 <div className="mb-6">
                                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Verification Code</label>
-                                    <input type="number" id="input-otp" onChange={aHandler}
-                                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Code" required />
+<input type="text" inputMode="numeric" pattern="[0-9]{6}" id="input-otp" onChange={aHandler}
+        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Code" required />
                                 </div>
                                 <button type="submit" onClick={naiveProve}
                                     disabled={otpDisable || amountDisable || recipientDisable} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Send</button>
