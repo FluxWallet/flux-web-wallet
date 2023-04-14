@@ -1,9 +1,25 @@
 import { connectorsForWallets, wallet } from "@rainbow-me/rainbowkit";
 import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
 import { Chain, chain, configureChains, createClient } from "wagmi";
+import { infuraProvider } from "wagmi/providers/infura";
 import { publicProvider } from "wagmi/providers/public";
 
-const { chains, provider } = configureChains([chain.localhost, chain.goerli], [publicProvider()]);
+const localhostChain: Chain = {
+  ...chain.localhost,
+  nativeCurrency: {
+    name: "Ether",
+    symbol: "ETH",
+    decimals: 18,
+  },
+};
+
+const { chains, provider } = configureChains(
+  [localhostChain, chain.sepolia, chain.goerli],
+  [
+    infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_PROJECT_ID }),
+    publicProvider(),
+  ]
+);
 
 export interface RainbowWeb3AuthConnectorProps {
   chains: Chain[];
@@ -21,7 +37,7 @@ export const rainbowWeb3AuthConnector = ({ chains }: RainbowWeb3AuthConnectorPro
         options: {
           clientId: process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID as string,
           network: "testnet",
-          chainId: "0x5",
+          chainId: "0x" + (chains[0]?.id || 5).toString(16),
           socialLoginConfig: {
             mfaLevel: "default",
           },
@@ -38,7 +54,7 @@ const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
     wallets: [
-      rainbowWeb3AuthConnector({ chains: [chain.goerli] }),
+      rainbowWeb3AuthConnector({ chains: [chain.sepolia, chain.goerli] }),
       wallet.walletConnect({ chains }),
       wallet.metaMask({ chains }),
       wallet.rainbow({ chains }),

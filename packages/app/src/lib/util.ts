@@ -35,7 +35,7 @@ export async function generateMerkleTree(): Promise<[uri: string, secret: string
   const { ethereum } = window as Window & typeof globalThis & { ethereum?: ethers.providers.ExternalProvider };
   if (!ethereum) throw new Error("No Ethereum provider found");
 
-  const provider = new ethers.providers.Web3Provider(ethereum);
+  const provider = new ethers.providers.Web3Provider(ethereum, "any");
   const signer = provider.getSigner();
 
   const SECRET = await generateSecret(signer);

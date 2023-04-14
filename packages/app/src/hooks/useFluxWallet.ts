@@ -33,9 +33,25 @@ export const useFluxWallet = () => {
 
     window.localStorage.setItem("debug", "aa*");
 
-    const networkName = connectedNetwork.chain?.network ?? "goerli";
-    if (networkName !== "localhost" && networkName !== "goerli") {
-      alert("please connect goerli network!");
+    const chainId = connectedNetwork.chain?.id;
+    let networkName = connectedNetwork.chain?.network;
+
+    // Normalize networkName based on chain ID to ensure robust detection
+    if (chainId === 11155111) {
+      networkName = "sepolia";
+    } else if (chainId === 5) {
+      networkName = "goerli";
+    } else if (chainId === 1337 || chainId === 31337) {
+      networkName = "localhost";
+    }
+
+    // Default fallback to sepolia if not connected yet or undefined
+    if (!networkName) {
+      networkName = "sepolia";
+    }
+
+    if (networkName !== "localhost" && networkName !== "goerli" && networkName !== "sepolia") {
+      alert("please connect goerli or sepolia network!");
       return;
     }
 
@@ -77,7 +93,7 @@ export const useFluxWallet = () => {
         signer.provider?.getBalance(addr).then((bal) => setBalance(bal.toString()));
       });
     }
-  }, [signer, connectedNetwork.chain?.network, isConnected, address]);
+  }, [signer, connectedNetwork.chain?.network, connectedNetwork.chain?.id, isConnected, address]);
 
   return { entryPoint, fluxWalletAPI, fluxWalletAddress, isDeployed, contract, balance, ownerWallet };
 };
