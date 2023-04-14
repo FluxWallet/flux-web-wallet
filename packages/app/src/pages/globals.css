@@ -2,12 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  /* .container {
-    @apply w-full max-w-5xl 2xl: max-w-7xl mx-auto px-5 lg:px-0 lg:ml-auto;
-    } */
+body {
+  @apply bg-[#F9FAFB] text-gray-900 min-h-screen font-sans;
+}
 
+@layer components {
   .appbox {
-    @apply bg-black w-80 h-5/6 relative rounded-3xl flex justify-between ml-[150px];
+    @apply bg-black w-[380px] min-h-[640px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] relative rounded-[36px] flex flex-col justify-start mx-auto overflow-hidden border-8 border-gray-950;
   }
 }
+

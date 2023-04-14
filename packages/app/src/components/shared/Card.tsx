@@ -1,17 +1,18 @@
 interface CardProps {
   children: React.ReactNode;
+  className?: string;
   width?: string;
   height?: string;
 }
 
 export const Card: React.FC<CardProps> = ({
   children,
-  width = "w-[320px]",
-  height = "h-[480px]",
+  className = "",
 }) => (
-  <div className={`bg-white rounded-[16px] object-contain ${width} ${height} relative`}>
-    <div className="flex h-full items-center justify-center px-4 inset-x-0 bottom-0">
-      <div className="w-full">{children}</div>
+  <div className={`bg-white rounded-t-[32px] rounded-b-[28px] flex-1 flex flex-col justify-start p-6 relative ${className}`}>
+    <div className="w-full h-full flex flex-col justify-between">
+      {children}
     </div>
   </div>
 );
+

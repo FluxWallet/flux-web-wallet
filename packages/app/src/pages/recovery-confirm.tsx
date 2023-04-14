@@ -51,56 +51,95 @@ const HomePage: NextPage = () => {
   return (
     <DefaultLayout>
       <div className="appbox">
-        <div>
-          <div className="pt-4 px-4">
-            <h1 className="text-4xl text-white py-4 font-sans">Start Flux Wallet Recovery</h1>
-            <h2 className="text-base text-white py-2 pb-10 font-sans"></h2>
-          </div>
-          <Card>
-            {txError && <p className="text-red-500 text-sm px-2">{txError}</p>}
-            <div>
-              <div className="py-1">
-                <h2 className="font-bold font-sans">Old Wallet Address </h2>
-                <p className="text-[11px]">{socialRecoveryWalletAddress}</p>
-              </div>
-              <div className="flex py-1">
-                <h2 className="font-bold font-sans"> Guardian Status : </h2>
-                <p className="pt-1 text-[13px]"> {isOk.toString()}</p>
-              </div>
-              <div className="flex py-1 pb-3">
-                <h2 className="font-bold font-sans"> Recovery Status : </h2>
-                <p className="pt-1 text-[13px]">{inRecovery.toString()}</p>
-              </div>
-
-              <div>
-                <form>
-                  <div className="py-2">
-                    <label className="block mb-2 font-bold font-sans text-gray-900 dark:text-white">New Owner Address</label>
-                    <input type="text" value={newOwner} onChange={(e) => setNewOwner(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Wallet Address" required />
-                  </div>
-                  <div>
-                    <label htmlFor="guardian" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Guardian #1</label>
-                    <input type="text" value={guardian} onChange={(e) => setGuardian(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Wallet Address" required />
-                  </div>
-                  <div className="py-2">
-                    <label htmlFor="guardian2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Guardian #2</label>
-                    <input type="text" value={guardian2} onChange={(e) => setGuardian2(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Wallet Address" required />
-                  </div>
-                </form>
-              </div>
-              <div>
-                <button
-                  onClick={txRecovery} disabled={!newOwner || !isOk || !inRecovery || !guardian || !guardian2 || txLoading}
-                  className="w-[280px] my-1 relative inline-flex items-center justify-center p-4 px-5 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out rounded-full shadow-xl group hover:ring-1 hover:ring-purple-500"
-                >
-                  <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700"></span>
-                  <span className="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-pink-500 rounded-full opacity-30 group-hover:rotate-90 ease"></span>
-                  <span className="relative text-white">{txLoading ? "Processing..." : "Start Recovery"}</span>
-                </button>
-              </div>
+        {socialRecoveryWalletAddress ? (
+          <div className="flex-1 flex flex-col justify-between">
+            <div className="pt-6 px-5 pb-6">
+              <h1 className="text-4xl text-white py-2 font-extrabold tracking-tight font-sans">Start Recovery</h1>
+              <h2 className="text-sm text-gray-300 font-medium font-sans">Finalize smart wallet ownership recovery</h2>
             </div>
-          </Card>
-        </div>
+            <Card>
+              <div className="space-y-3.5 text-gray-700">
+                {txError && <p className="text-red-500 text-xs text-center font-medium">{txError}</p>}
+                
+                {!address && (
+                  <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl text-[10px] text-amber-800 font-medium leading-relaxed">
+                    ⚠️ Please connect your guardian wallet in the top-right to execute recovery.
+                  </div>
+                )}
+
+                <div>
+                  <h2 className="font-bold text-xs text-gray-900 font-sans mb-0.5">Old Wallet Address</h2>
+                  <p className="text-[11px] bg-gray-50 border border-gray-100 rounded-lg p-2 font-mono break-all text-gray-800">{socialRecoveryWalletAddress}</p>
+                </div>
+
+                <div className="flex justify-between items-center bg-gray-50 border border-gray-100 rounded-xl p-2 px-3">
+                  <div>
+                    <h2 className="font-bold text-xs text-gray-900 font-sans">Guardian Status</h2>
+                  </div>
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isOk ? "bg-emerald-100 text-emerald-800" : "bg-gray-200 text-gray-700"}`}>
+                    {isOk.toString()}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center bg-gray-50 border border-gray-100 rounded-xl p-2 px-3">
+                  <div>
+                    <h2 className="font-bold text-xs text-gray-900 font-sans">Recovery Status</h2>
+                  </div>
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${inRecovery ? "bg-indigo-100 text-indigo-800" : "bg-gray-200 text-gray-700"}`}>
+                    {inRecovery.toString()}
+                  </span>
+                </div>
+
+                <div>
+                  <form className="space-y-2.5">
+                    <div>
+                      <label className="block mb-1 text-xs font-bold text-gray-900 font-sans">New Owner Address</label>
+                      <input type="text" value={newOwner} onChange={(e) => setNewOwner(e.target.value)} className="bg-gray-50 border border-slate-200 text-gray-900 text-xs rounded-xl focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 block w-full p-2.5 outline-none transition-all" placeholder="Wallet Address" required />
+                    </div>
+                    <div>
+                      <label htmlFor="guardian" className="block mb-1 text-xs font-bold text-gray-900 font-sans">Guardian #1</label>
+                      <input type="text" value={guardian} onChange={(e) => setGuardian(e.target.value)} className="bg-gray-50 border border-slate-200 text-gray-900 text-xs rounded-xl focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 block w-full p-2.5 outline-none transition-all" placeholder="Wallet Address" required />
+                    </div>
+                    <div>
+                      <label htmlFor="guardian2" className="block mb-1 text-xs font-bold text-gray-900 font-sans">Guardian #2</label>
+                      <input type="text" value={guardian2} onChange={(e) => setGuardian2(e.target.value)} className="bg-gray-50 border border-slate-200 text-gray-900 text-xs rounded-xl focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 block w-full p-2.5 outline-none transition-all" placeholder="Wallet Address" required />
+                    </div>
+                  </form>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    onClick={txRecovery} disabled={!newOwner || !isOk || !inRecovery || !guardian || !guardian2 || txLoading}
+                    className="w-full py-3 rounded-full text-white font-semibold text-xs shadow-md transition-all bg-gradient-to-r from-blue-600 via-indigo-600 to-pink-600 hover:opacity-95 active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
+                  >
+                    {txLoading ? "Processing..." : "Start Recovery"}
+                  </button>
+                </div>
+              </div>
+            </Card>
+          </div>
+        ) : (
+          <div className="flex-1 flex flex-col justify-between">
+            <div className="pt-6 px-5 pb-6">
+              <h1 className="text-4xl text-white py-2 font-extrabold tracking-tight font-sans">Recovery Confirm</h1>
+              <h2 className="text-sm text-gray-300 font-medium font-sans">Execute wallet key recovery</h2>
+            </div>
+
+            <Card>
+              <div className="space-y-6 text-center text-gray-700 py-6">
+                <div className="w-16 h-16 rounded-3xl bg-amber-500/10 border border-amber-500/20 text-amber-500 mx-auto flex items-center justify-center text-2xl">
+                  ⚠️
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-bold text-gray-900 font-sans">Invalid Recovery Link</h3>
+                  <p className="text-xs text-gray-500 leading-relaxed max-w-[240px] mx-auto">
+                    No target smart contract wallet address was specified for recovery. Please verify the link shared by the wallet owner.
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </div>
+        )}
       </div>
     </DefaultLayout>
   );

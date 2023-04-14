@@ -1,8 +1,10 @@
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { NextPage } from "next";
 import Image from 'next/image'
 import { useState } from 'react'
 
 import { DefaultLayout } from "@/components/layouts/Default";
+import { Card } from "@/components/shared/Card";
 import { useFluxWallet } from "@/hooks/useFluxWallet";
 import { useZkProof } from "@/hooks/useZkProof";
 import { generateInput } from "@/lib/util";
@@ -75,60 +77,136 @@ const Send: NextPage = () => {
 
     return (
         <DefaultLayout>
-            <div className='appbox bg-white h-full'>
-                <div className="h-[600px]">
-                    <div className='pt-8 px-4'>
-                        <div className="relative flex row">
-                            <div className="w-10 h-10 p-1 rounded-full border-2 border-indigo-500/100">
-                                <Image className="w-10 h-10 rounded-full" src={PROFILE_SRC} width={40} height={40} alt="" />
-                            </div>
-                            <span className="top-0 left-7 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
-                            <div className='px-4 items-center'>
-                                <h1 className='font-bold text-lg'>Welcome</h1>
-                                <h1 className='text-[9px]'>{scwAddress}</h1>
-                            </div>
+            <div className="appbox">
+                {fluxWalletAddress ? (
+                    <div className="flex-1 flex flex-col justify-between">
+                        <div className="pt-6 px-5 pb-6">
+                            <h1 className="text-4xl text-white py-2 font-extrabold tracking-tight font-sans">Send</h1>
+                            <h2 className="text-sm text-gray-300 font-medium font-sans">Secure Transfer with ZK-2FA</h2>
                         </div>
-
-                        <div className="relative my-5 w-full">
-                            <h1 className="text-2xl pb-5 font-bold font-sans">Send Transaction</h1>
-
-                            <form>
-                                <div className="mb-6">
-                                    <label htmlFor="text"
-                                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Recipient Address</label>
-                                    <input type="text" id="input-recipient" onChange={recipientHandler} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="0xdeaa150597535Eed8c95Ad090757815F1B9Da15d" required />
+                        <Card>
+                            <div className="space-y-4 text-gray-700">
+                                {/* Profile Header */}
+                                <div className="relative flex items-center gap-3">
+                                    <div className="relative w-10 h-10 rounded-full border-2 border-indigo-500/80 p-0.5 overflow-hidden">
+                                        <Image className="rounded-full" src={PROFILE_SRC} width={36} height={36} alt="profile" />
+                                    </div>
+                                    <span className="absolute bottom-0 left-7 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></span>
+                                    <div className="flex-1 min-w-0">
+                                        <h1 className="font-bold text-sm text-gray-900 leading-none">Welcome</h1>
+                                        <p className="text-[10px] text-gray-500 truncate font-mono mt-0.5">{scwAddress}</p>
+                                    </div>
                                 </div>
-                                <div className="mb-6">
-                                    <label htmlFor="tokens" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Amount To Transfer</label>
-                                    <input type="text" onChange={amountHandler} id="input-amount" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="0 ETH" required />
-                                </div>
-                                <div className="mb-6">
-                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter Verification Code</label>
-<input type="text" inputMode="numeric" pattern="[0-9]{6}" id="input-otp" onChange={aHandler}
-        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Code" required />
-                                </div>
-                                <button type="submit" onClick={naiveProve}
-                                    disabled={otpDisable || amountDisable || recipientDisable} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Send</button>
-                            </form>
-                        </div>
 
-                        {verifying ? <progress className="progress w-56"></progress> : null}
-                        {error ? (
-                            <p className="alert-error">{errorMsg}</p>
-                        ) : null}
-                        {success ? (
-                            <div>
-                                <p className="alert-success">
-                                    Please check your scw for confirmation {scwAddress}
-                                </p>
-                                <p>Tx hash: {confirmation}</p>
+                                <div className="space-y-3 pt-2">
+                                    <form className="space-y-3">
+                                        <div>
+                                            <label htmlFor="input-recipient" className="block mb-1 text-xs font-bold text-gray-900 font-sans">Recipient Address</label>
+                                            <input type="text" id="input-recipient" onChange={recipientHandler} className="bg-gray-50 border border-slate-200 text-gray-900 text-xs rounded-xl focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 block w-full p-2.5 outline-none transition-all" placeholder="0xdeaa150597535Eed8c95Ad090757815F1B9Da15d" required />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="input-amount" className="block mb-1 text-xs font-bold text-gray-900 font-sans">Amount to Transfer</label>
+                                            <input type="text" onChange={amountHandler} id="input-amount" className="bg-gray-50 border border-slate-200 text-gray-900 text-xs rounded-xl focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 block w-full p-2.5 outline-none transition-all" placeholder="0 ETH" required />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="input-otp" className="block mb-1 text-xs font-bold text-gray-900 font-sans">Verification Code (Google Auth)</label>
+                                            <input type="text" inputMode="numeric" pattern="[0-9]{6}" id="input-otp" onChange={aHandler} className="bg-gray-50 border border-slate-200 text-gray-900 text-xs rounded-xl focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 block w-full p-2.5 outline-none transition-all" placeholder="Code" required />
+                                        </div>
+                                    </form>
+                                    
+                                    <div className="pt-2">
+                                        <button
+                                            type="submit"
+                                            onClick={naiveProve}
+                                            disabled={otpDisable || amountDisable || recipientDisable || verifying}
+                                            className="w-full py-3 rounded-full text-white font-semibold text-xs shadow-md transition-all bg-gradient-to-r from-blue-600 via-indigo-600 to-pink-600 hover:opacity-95 active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
+                                        >
+                                            {verifying ? "Generating ZK Proof..." : "Send Transaction"}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {verifying && (
+                                    <div className="flex flex-col items-center gap-1.5 py-2">
+                                        <progress className="progress progress-primary w-full max-w-[200px]"></progress>
+                                        <span className="text-[9px] text-gray-400 animate-pulse">Generating cryptographic ZK-Proof...</span>
+                                    </div>
+                                )}
+                                {error && (
+                                    <p className="bg-rose-50 text-rose-800 text-[10px] p-2.5 rounded-xl border border-rose-100 font-medium break-all">{errorMsg}</p>
+                                )}
+                                {success && (
+                                    <div className="bg-emerald-50 text-emerald-800 text-[10px] p-3 rounded-xl border border-emerald-100 font-medium space-y-1">
+                                        <p>✓ Transaction submitted successfully!</p>
+                                        <p className="font-mono text-[9px] break-all opacity-80">Hash: {confirmation}</p>
+                                    </div>
+                                )}
                             </div>
-                        ) : null}
+                        </Card>
                     </div>
-                </div>
+                ) : (
+                    <div className="flex-1 flex flex-col justify-between">
+                        <div className="pt-6 px-5 pb-6">
+                            <h1 className="text-4xl text-white py-2 font-extrabold tracking-tight font-sans">Send</h1>
+                            <h2 className="text-sm text-gray-300 font-medium font-sans">Transfer assets with ZK-2FA protection</h2>
+                        </div>
+
+                        <Card>
+                            <div className="space-y-6 text-center text-gray-700 py-6 my-auto">
+                                <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-pink-600 p-0.5 shadow-md mx-auto flex items-center justify-center">
+                                    <div className="w-full h-full bg-white rounded-[22px] flex items-center justify-center text-2xl">
+                                        💸
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <h3 className="text-xl font-bold text-gray-900 font-sans">Connect Owner Wallet</h3>
+                                    <p className="text-xs text-gray-500 leading-relaxed max-w-[240px] mx-auto">
+                                        Connect your owner EOA wallet to send transactions and generate zero-knowledge 2FA proofs.
+                                    </p>
+                                </div>
+
+                                <div className="pt-4">
+                                    <ConnectButton.Custom>
+                                        {({ account, chain, openConnectModal, openChainModal, mounted }) => {
+                                            const ready = mounted;
+                                            if (!ready) return null;
+
+                                            const isConnected = !!account && !!chain;
+                                            const isSupported = isConnected && (chain.id === 11155111 || chain.id === 5 || chain.id === 1337 || chain.id === 31337);
+
+                                            if (!isConnected) {
+                                                return (
+                                                    <button
+                                                        onClick={openConnectModal}
+                                                        className="w-full py-3.5 rounded-full text-white font-bold text-xs shadow-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-pink-600 hover:opacity-95 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+                                                    >
+                                                        Connect Wallet
+                                                    </button>
+                                                );
+                                            }
+
+                                            if (!isSupported) {
+                                                return (
+                                                    <button
+                                                        onClick={openChainModal}
+                                                        className="w-full py-3.5 rounded-full text-white font-bold text-xs shadow-lg bg-gradient-to-r from-rose-600 to-red-600 hover:opacity-95 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+                                                    >
+                                                        Switch to Sepolia
+                                                    </button>
+                                                );
+                                            }
+
+                                            return null;
+                                        }}
+                                    </ConnectButton.Custom>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
+                )}
             </div>
-        </DefaultLayout >
-    )
+        </DefaultLayout>
+    );
 }
 
 export default Send

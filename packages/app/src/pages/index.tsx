@@ -1,3 +1,4 @@
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { SafeOnRampEvent, SafeOnRampKit, SafeOnRampProviderType } from '@safe-global/onramp-kit';
 import { ethers } from "ethers";
 import { NextPage } from "next";
@@ -91,103 +92,109 @@ const HomePage: NextPage = () => {
   return (
     <DefaultLayout>
       <div className="appbox">
-        {fluxWalletAddress && (
-          <div>
-            <div className="pt-4 px-4">
-              <h1 className="text-4xl text-white py-4 font-sans">Hey ! 👋</h1>
-              <h2 className="text-base text-white py-2 pb-10 font-sans"> Welcome To Flux Smart Contract Wallet</h2>
+        {fluxWalletAddress ? (
+          <div className="flex-1 flex flex-col justify-between">
+            <div className="pt-6 px-5 pb-6">
+              <h1 className="text-4xl text-white py-2 font-extrabold tracking-tight font-sans">Hey ! 👋</h1>
+              <h2 className="text-sm text-gray-300 font-medium font-sans"> Welcome To Flux Smart Contract Wallet</h2>
             </div>
 
             <Card>
-              <div>
-                <div className="py-4">
-                  <h2 className="font-bold font-sans">AA Wallet Address </h2>
-                  <p className="text-[11px]">{fluxWalletAddress}</p>
-                  <p className="text-[10px]">* AA address is determined counterfactually by create2</p>
+              <div className="space-y-4 text-gray-700">
+                <div>
+                  <h2 className="font-bold text-xs text-gray-900 font-sans">AA Wallet Address</h2>
+                  <p className="text-[11px] bg-gray-50 border border-gray-100 rounded-lg p-2 font-mono break-all text-gray-800">{fluxWalletAddress}</p>
+                  <p className="text-[9px] text-gray-400 mt-0.5">* AA address is determined counterfactually by create2</p>
                 </div>
-                <div className="py-4">
-                  <h2 className="font-bold font-sans">Owner Wallet Address </h2>
-                  <p className="text-[11px]">{owner}</p>
+                <div>
+                  <h2 className="font-bold text-xs text-gray-900 font-sans">Owner Wallet Address</h2>
+                  <p className="text-[11px] bg-gray-50 border border-gray-100 rounded-lg p-2 font-mono break-all text-gray-800">{owner}</p>
                 </div>
-                <div className="py-4">
-                  <h2 className="font-bold font-sans">
-                    Deployed Status : {"  "}
+                <div className="flex items-center justify-between">
+                  <h2 className="font-bold text-xs text-gray-900 font-sans">Deployed Status</h2>
+                  <div>
                     {isDeployed ? (
-                      <span className="badge badge-success gap-2 text-[11px]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-4 h-4 stroke-current">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                      <span className="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
                         </svg>
-                        success
+                        Success
                       </span>
                     ) : (
-                      <span className="badge badge-error gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-4 h-4 stroke-current">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                      <span className="inline-flex items-center gap-1 bg-rose-100 text-rose-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                        not deployed
+                        False
                       </span>
                     )}
-                  </h2>
-                  <p className="text-[10px]">* no need to deploy to use acount abstraction wallet</p>
+                  </div>
                 </div>
-                <div className="py-4">
-                  <h2 className="font-bold font-sans flex">
-                    Balance : <span className="text-[14px] ml-1">{ethers.utils.formatEther(balance)} ETH</span>
-                  </h2>
-                  <p className="text-[10px]">* deposit is required for demo</p>
+                <div className="flex items-center justify-between border-t border-gray-100 pt-3">
+                  <h2 className="font-bold text-xs text-gray-900 font-sans">Balance</h2>
+                  <span className="text-xs font-extrabold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg">
+                    {ethers.utils.formatEther(balance)} ETH
+                  </span>
                 </div>
+                <p className="text-[9px] text-gray-400 mt-1">* deposit is required for demo</p>
 
-                <div className="w-screen">
-                  <button onClick={deploy} disabled={isDeployed}
-                    className="w-[280px] my-1 relative inline-flex items-center justify-center p-4 px-5 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out rounded-full shadow-xl group hover:ring-1 hover:ring-purple-500"
+                <div className="flex flex-col items-center gap-2 pt-2">
+                  <button
+                    onClick={deploy}
+                    disabled={isDeployed}
+                    className="w-full py-3 rounded-full text-white font-semibold text-xs shadow-md transition-all bg-gradient-to-r from-blue-600 via-indigo-600 to-pink-600 hover:opacity-95 active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
                   >
-                    <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700"></span>
-                    <span className="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-pink-500 rounded-full opacity-30 group-hover:rotate-90 ease"></span>
-                    <span className="relative text-white">Deposit 0.01 ETH</span>
+                    Deposit 0.1 ETH
                   </button>
-                </div>
-                <div>
-                  <label htmlFor="my-modal-7"
-                    className="btn w-[130px] mx-1 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700 rounded-full shadow-xl group hover:ring-1 hover:ring-purple-500 transition duration-500 origin-bottom-left transform bg-pink-500"
-                    onClick={handleCreateSession}
-                  >
-                    Via Stripe
-                  </label>
-                  <label htmlFor="my-modal-6"
-                    className="btn w-[130px] mx-1 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700 rounded-full shadow-xl group hover:ring-1 hover:ring-purple-500 transition duration-500 origin-bottom-left transform bg-pink-500"
-                  >
-                    Via Gelato
-                  </label>
-                </div>
 
-                <div>
-                  <label htmlFor="my-modal-6"
-                    className="btn w-[280px] my-1 bg-gradient-to-br from-black via-grey-600 to-black rounded-full shadow-xl group hover:ring-1 hover:ring-purple-500 transition duration-500 origin-bottom-left transform bg-pink-500"
+                  <div className="flex justify-between w-full gap-2">
+                    <label
+                      htmlFor="my-modal-7"
+                      className="btn btn-sm flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-none rounded-full shadow-sm py-2.5 h-auto min-h-0 normal-case font-semibold text-xs text-center cursor-pointer hover:opacity-95"
+                      onClick={handleCreateSession}
+                    >
+                      Via Stripe
+                    </label>
+                    <label
+                      htmlFor="my-modal-6"
+                      className="btn btn-sm flex-1 bg-gradient-to-r from-indigo-600 to-pink-600 text-white border-none rounded-full shadow-sm py-2.5 h-auto min-h-0 normal-case font-semibold text-xs text-center cursor-pointer hover:opacity-95"
+                    >
+                      Via Gelato
+                    </label>
+                  </div>
+
+                  <button
                     onClick={deploy2}
+                    className="w-full mt-2 py-3 rounded-full bg-black text-white hover:bg-gray-900 font-bold text-xs shadow-md transition-all active:scale-95"
                   >
                     Deploy
-                  </label>
+                  </button>
+                </div>
 
-                  <div>
-                    <input type="checkbox" id="my-modal-6" className="modal-toggle" />
-                    <div className="modal modal-bottom sm:modal-middle">
-                      <div className="modal-box relative">
-                        <label htmlFor="my-modal-6" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-                        <h3 className="font-bold text-lg">Deploying Your Smart Contract Wallet</h3>
-                        <progress className="progress w-56"></progress>
-                        <div className="modal-action">
-                          <label htmlFor="my-modal-6" className="btn" onClick={deploy3}>Yay!</label>
-                        </div>
+                {/* Modals inside layout */}
+                <div>
+                  <input type="checkbox" id="my-modal-6" className="modal-toggle" />
+                  <div className="modal modal-bottom sm:modal-middle">
+                    <div className="modal-box bg-white text-gray-900 relative">
+                      <label htmlFor="my-modal-6" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                      <h3 className="font-bold text-lg text-gray-900 mb-2">Deploying Your Smart Contract Wallet</h3>
+                      <div className="py-4 flex flex-col items-center gap-3">
+                        <progress className="progress progress-primary w-56"></progress>
+                      </div>
+                      <div className="modal-action">
+                        <label htmlFor="my-modal-6" className="btn btn-primary" onClick={deploy3}>Yay!</label>
                       </div>
                     </div>
+                  </div>
 
-                    <input type="checkbox" id="my-modal-7" className="modal-toggle h-[600]" />
-                    <div className="modal modal-bottom sm:modal-middle">
-                      <div className="modal-box">
-                        <div id="stripe-root" ref={stripeRootRef}></div>
-                        <div className="modal-action">
-                          <label htmlFor="my-modal-7" className="btn">Close</label>
-                        </div>
+                  <input type="checkbox" id="my-modal-7" className="modal-toggle" />
+                  <div className="modal modal-bottom sm:modal-middle">
+                    <div className="modal-box bg-white text-gray-900 relative">
+                      <label htmlFor="my-modal-7" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                      <h3 className="font-bold text-lg text-gray-900 mb-4">Stripe Deposit</h3>
+                      <div id="stripe-root" ref={stripeRootRef} className="min-h-[200px]"></div>
+                      <div className="modal-action">
+                        <label htmlFor="my-modal-7" className="btn btn-ghost">Close</label>
                       </div>
                     </div>
                   </div>
@@ -195,9 +202,68 @@ const HomePage: NextPage = () => {
               </div>
             </Card>
           </div>
+        ) : (
+          <div className="flex-1 flex flex-col justify-between">
+            <div className="pt-6 px-5 pb-6">
+              <h1 className="text-4xl text-white py-2 font-extrabold tracking-tight font-sans">Flux Wallet</h1>
+              <h2 className="text-xs text-gray-300 font-medium font-sans">The Future of Web3 Smart Wallets</h2>
+            </div>
+
+            <Card>
+              <div className="space-y-6 text-center text-gray-700 py-6 my-auto">
+                <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-pink-600 p-0.5 shadow-md mx-auto flex items-center justify-center">
+                  <div className="w-full h-full bg-white rounded-[22px] flex items-center justify-center text-2xl">
+                    ⚡
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-bold text-gray-900 font-sans">Connect Owner Wallet</h3>
+                  <p className="text-xs text-gray-500 leading-relaxed max-w-[240px] mx-auto">
+                    Connect your owner EOA wallet to create or load your counterfactual account abstraction smart wallet.
+                  </p>
+                </div>
+
+                <div className="pt-4">
+                  <ConnectButton.Custom>
+                    {({ account, chain, openConnectModal, openChainModal, mounted }) => {
+                      const ready = mounted;
+                      if (!ready) return null;
+
+                      const isConnected = !!account && !!chain;
+                      const isSupported = isConnected && (chain.id === 11155111 || chain.id === 5 || chain.id === 1337 || chain.id === 31337);
+
+                      if (!isConnected) {
+                        return (
+                          <button
+                            onClick={openConnectModal}
+                            className="w-full py-3.5 rounded-full text-white font-bold text-xs shadow-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-pink-600 hover:opacity-95 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+                          >
+                            Connect Wallet
+                          </button>
+                        );
+                      }
+
+                      if (!isSupported) {
+                        return (
+                          <button
+                            onClick={openChainModal}
+                            className="w-full py-3.5 rounded-full text-white font-bold text-xs shadow-lg bg-gradient-to-r from-rose-600 to-red-600 hover:opacity-95 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+                          >
+                            Switch to Sepolia
+                          </button>
+                        );
+                      }
+
+                      return null;
+                    }}
+                  </ConnectButton.Custom>
+                </div>
+              </div>
+            </Card>
+          </div>
         )}
       </div>
-    </DefaultLayout >
+    </DefaultLayout>
   );
 };
 
