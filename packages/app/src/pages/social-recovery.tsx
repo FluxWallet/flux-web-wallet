@@ -48,9 +48,9 @@ const HomePage: NextPage = () => {
       <div className="appbox">
         {fluxWalletAddress ? (
           <div className="flex-1 flex flex-col justify-between">
-            <div className="pt-6 px-5 pb-6">
-              <h1 className="text-4xl text-white py-2 font-extrabold tracking-tight font-sans">Let&apos;s Setup</h1>
-              <h2 className="text-sm text-gray-300 font-medium font-sans">This Can Save You From Disaster :)</h2>
+            <div className="pt-8 px-6 pb-6">
+              <h1 className="text-3xl font-black tracking-tight font-sans bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">Let&apos;s Setup</h1>
+              <h2 className="text-[11px] text-slate-400 font-semibold tracking-wide uppercase mt-1">This Can Save You From Disaster :)</h2>
             </div>
             <Card>
               <div className="space-y-4 text-gray-700">
@@ -93,21 +93,26 @@ const HomePage: NextPage = () => {
           </div>
         ) : (
           <div className="flex-1 flex flex-col justify-between">
-            <div className="pt-6 px-5 pb-6">
-              <h1 className="text-4xl text-white py-2 font-extrabold tracking-tight font-sans">Social Recovery</h1>
-              <h2 className="text-sm text-gray-300 font-medium font-sans">Setup account backup guardians</h2>
+            <div className="pt-8 px-6 pb-6">
+              <h1 className="text-3xl font-black tracking-tight font-sans bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">Social Recovery</h1>
+              <h2 className="text-[11px] text-slate-400 font-semibold tracking-wide uppercase mt-1">Setup account backup guardians</h2>
             </div>
 
             <Card>
               <div className="space-y-6 text-center text-gray-700 py-6 my-auto">
-                <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-pink-600 p-0.5 shadow-md mx-auto flex items-center justify-center">
-                  <div className="w-full h-full bg-white rounded-[22px] flex items-center justify-center text-2xl">
-                    🛡️
+                <div className="relative w-16 h-16 mx-auto mb-2 flex items-center justify-center">
+                  <div className="absolute inset-0 rounded-full bg-emerald-500/10 blur-xl animate-pulse"></div>
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 p-[2px] shadow-lg shadow-emerald-500/10 flex items-center justify-center">
+                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
+                      <svg className="w-7 h-7 text-emerald-600 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-gray-900 font-sans">Connect Owner Wallet</h3>
-                  <p className="text-xs text-gray-500 leading-relaxed max-w-[240px] mx-auto">
+                  <h3 className="text-xl font-bold text-gray-900 font-sans tracking-tight">Connect Owner Wallet</h3>
+                  <p className="text-[13px] text-slate-500 leading-relaxed max-w-[260px] mx-auto">
                     Connect your owner EOA wallet to configure trusted guardians for your smart contract wallet.
                   </p>
                 </div>
@@ -125,7 +130,7 @@ const HomePage: NextPage = () => {
                         return (
                           <button
                             onClick={openConnectModal}
-                            className="w-full py-3.5 rounded-full text-white font-bold text-xs shadow-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-pink-600 hover:opacity-95 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+                            className="w-full py-3.5 rounded-xl text-white font-semibold text-xs tracking-wider uppercase shadow-lg shadow-emerald-600/25 bg-gradient-to-r from-emerald-600 to-teal-500 hover:shadow-xl hover:shadow-emerald-600/35 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
                           >
                             Connect Wallet
                           </button>
@@ -136,7 +141,7 @@ const HomePage: NextPage = () => {
                         return (
                           <button
                             onClick={openChainModal}
-                            className="w-full py-3.5 rounded-full text-white font-bold text-xs shadow-lg bg-gradient-to-r from-rose-600 to-red-600 hover:opacity-95 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+                            className="w-full py-3.5 rounded-xl text-white font-semibold text-xs tracking-wider uppercase shadow-lg shadow-rose-600/25 bg-gradient-to-r from-rose-600 to-red-600 hover:shadow-xl hover:shadow-rose-600/35 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
                           >
                             Switch to Sepolia
                           </button>

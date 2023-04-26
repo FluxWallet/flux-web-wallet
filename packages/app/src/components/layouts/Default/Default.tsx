@@ -39,6 +39,20 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
           {/* Brand Logo */}
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push("/")}>
             <p className="text-xl font-extrabold tracking-tight text-gray-900">Flux Wallet</p>
+            <span className="group relative inline-flex items-center gap-1 bg-amber-50 text-amber-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-amber-200/50 shadow-sm select-none cursor-help">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500"></span>
+              </span>
+              Goerli Only (eth-infinitism)
+              
+              {/* Tooltip explaining why Goerli is required */}
+              <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2 w-72 bg-gray-900 text-white text-[11px] font-normal leading-relaxed p-3 rounded-xl shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 border border-gray-800">
+                <strong className="block text-amber-400 font-bold mb-1">Why Goerli?</strong>
+                This app runs strictly on Goerli because the account abstraction entrypoints, paymasters, ZK-2FA verifiers, and eth-infinitism reference bundlers are deployed at Goerli addresses.
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 border-[6px] border-transparent border-b-gray-900"></span>
+              </span>
+            </span>
           </div>
 
           {/* Navigation Group */}

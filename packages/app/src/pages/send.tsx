@@ -80,9 +80,9 @@ const Send: NextPage = () => {
             <div className="appbox">
                 {fluxWalletAddress ? (
                     <div className="flex-1 flex flex-col justify-between">
-                        <div className="pt-6 px-5 pb-6">
-                            <h1 className="text-4xl text-white py-2 font-extrabold tracking-tight font-sans">Send</h1>
-                            <h2 className="text-sm text-gray-300 font-medium font-sans">Secure Transfer with ZK-2FA</h2>
+                        <div className="pt-8 px-6 pb-6">
+                            <h1 className="text-3xl font-black tracking-tight font-sans bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">Send</h1>
+                            <h2 className="text-[11px] text-slate-400 font-semibold tracking-wide uppercase mt-1">Secure Transfer with ZK-2FA</h2>
                         </div>
                         <Card>
                             <div className="space-y-4 text-gray-700">
@@ -146,21 +146,26 @@ const Send: NextPage = () => {
                     </div>
                 ) : (
                     <div className="flex-1 flex flex-col justify-between">
-                        <div className="pt-6 px-5 pb-6">
-                            <h1 className="text-4xl text-white py-2 font-extrabold tracking-tight font-sans">Send</h1>
-                            <h2 className="text-sm text-gray-300 font-medium font-sans">Transfer assets with ZK-2FA protection</h2>
+                        <div className="pt-8 px-6 pb-6">
+                            <h1 className="text-3xl font-black tracking-tight font-sans bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">Send</h1>
+                            <h2 className="text-[11px] text-slate-400 font-semibold tracking-wide uppercase mt-1">Transfer assets with ZK-2FA protection</h2>
                         </div>
 
                         <Card>
                             <div className="space-y-6 text-center text-gray-700 py-6 my-auto">
-                                <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-pink-600 p-0.5 shadow-md mx-auto flex items-center justify-center">
-                                    <div className="w-full h-full bg-white rounded-[22px] flex items-center justify-center text-2xl">
-                                        💸
+                                <div className="relative w-16 h-16 mx-auto mb-2 flex items-center justify-center">
+                                    <div className="absolute inset-0 rounded-full bg-rose-500/10 blur-xl animate-pulse"></div>
+                                    <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-rose-600 via-pink-500 to-orange-500 p-[2px] shadow-lg shadow-rose-500/10 flex items-center justify-center">
+                                        <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-rose-600 translate-x-px -translate-y-px animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                            </svg>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-xl font-bold text-gray-900 font-sans">Connect Owner Wallet</h3>
-                                    <p className="text-xs text-gray-500 leading-relaxed max-w-[240px] mx-auto">
+                                    <h3 className="text-xl font-bold text-gray-900 font-sans tracking-tight">Connect Owner Wallet</h3>
+                                    <p className="text-[13px] text-slate-500 leading-relaxed max-w-[260px] mx-auto">
                                         Connect your owner EOA wallet to send transactions and generate zero-knowledge 2FA proofs.
                                     </p>
                                 </div>
@@ -178,7 +183,7 @@ const Send: NextPage = () => {
                                                 return (
                                                     <button
                                                         onClick={openConnectModal}
-                                                        className="w-full py-3.5 rounded-full text-white font-bold text-xs shadow-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-pink-600 hover:opacity-95 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+                                                        className="w-full py-3.5 rounded-xl text-white font-semibold text-xs tracking-wider uppercase shadow-lg shadow-rose-600/25 bg-gradient-to-r from-rose-600 via-pink-500 to-orange-500 hover:shadow-xl hover:shadow-rose-600/35 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
                                                     >
                                                         Connect Wallet
                                                     </button>
@@ -189,7 +194,7 @@ const Send: NextPage = () => {
                                                 return (
                                                     <button
                                                         onClick={openChainModal}
-                                                        className="w-full py-3.5 rounded-full text-white font-bold text-xs shadow-lg bg-gradient-to-r from-rose-600 to-red-600 hover:opacity-95 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+                                                        className="w-full py-3.5 rounded-xl text-white font-semibold text-xs tracking-wider uppercase shadow-lg shadow-rose-600/25 bg-gradient-to-r from-rose-600 to-red-600 hover:shadow-xl hover:shadow-rose-600/35 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
                                                     >
                                                         Switch to Sepolia
                                                     </button>
